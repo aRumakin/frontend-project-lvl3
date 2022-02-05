@@ -1,0 +1,38 @@
+
+name: github-linter-test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: |
+          make install
+        env:
+          CI: true  
+      - name: Run linter
+        # Run Linter
+        run: |
+          make lint
+      - name: Test & publish code coverage
+        # Publish code coverage on Code Climate
+        # https://github.com/paambaati/codeclimate-action
+        uses: paambaati/codeclimate-action@v2.7.4
+        # Add Code Climate secret key
+        env:
+          CC_TEST_REPORTER_ID: cf35414332c285844a0cabb1865a7564b5184b5876d2e46c1e92e602b9bed132
+        with:
+          coverageCommand: make test-coverage
+          debug: true
