@@ -1,1 +1,3 @@
-// @ts-check
+import application from './application.js';
+
+application();
