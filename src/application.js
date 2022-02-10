@@ -2,19 +2,20 @@ import validator from './validator';
 import watchedSt from './view';
 import _ from 'lodash';
 import axios from 'axios';
+import parseRSS from './parser';
 
 const state = {
   inputUrl: '',
   validUrls: [],
   form: {
     processState: 'filling',
-    errors: {},
   },
   validation: {
     processState: '',
     validationState: '',
     processError: null,
   },
+  parserState: '',
 };
 
 const watchedState = watchedSt(state);
@@ -36,16 +37,23 @@ export default () => {
       if (watchedState.validUrls.includes(inputUrl)) {
         watchedState.validation.validationState = 'duplication';
       } else {
-        watchedState.validation.validationState = 'valid';
         axios.get(inputUrl)
         .then(function (response) {
-          parseRSS(response.data);
+          const parsedRSS = parseRSS(response.data, watchedState);
+          if (parsedRSS !== '') {
+            watchedState.validation.validationState = 'valid';
+            watchedState.validUrls.push(inputUrl);
+            watchedState.parserState = 'valid';
+          } else {
+            watchedState.parserState = 'invalid';
+          }
         })
         .catch(function (error) {
           watchedState.validation.processState = error;
         })
       }
-    }).catch((_err) => {
+    }).catch((err) => {
+      console.log(err)
       watchedState.validation.validationState = 'invalid';
     })
   });

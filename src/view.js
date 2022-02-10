@@ -1,5 +1,6 @@
 import onChange from 'on-change';
 import renderError from './render/renderErrors';
+import renderValid from './render/renderValid';
 
 const watchedState = (state) => onChange(state, (path, value) => {
   const rssFormEl = document.querySelector('.rss-form');
@@ -13,14 +14,17 @@ const watchedState = (state) => onChange(state, (path, value) => {
     if (value === 'duplication') {
       renderError(urlInputEl, feedbackEl, 'RSS уже существует');
     }
+  }
+  if (path === 'parserState') {
+    if (value === 'invalid') {
+      renderError(urlInputEl, feedbackEl, 'Ресурс не содержит валидный RSS');
+    }
     if (value === 'valid') {
       renderValid(urlInputEl, feedbackEl, 'RSS успешно загружен');
+      rssFormEl.reset();
+      rssFormEl.focus();
     }
   }
-
-
-
-
 });
 
 export default watchedState;
