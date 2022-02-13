@@ -35,6 +35,35 @@ export default () => {
       const inputEl = document.querySelector('#url-input');
 
       const watchedState = watchedSt(state, i18nInstance);
+
+      const updatePosts = () => {
+        setTimeout(() => {
+          const tempPosts = [];
+          watchedState.validUrls.forEach((url) => {
+            axios.get(url)
+              .then((response) => {
+                const parsed = parseRSS(response.data, watchedState);
+                if (parsed !== '') {
+                  tempPosts.push(...parsed.posts);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+                updatePosts();
+              });
+          });
+          Promise.all(tempPosts)
+            .then((data) => {
+              const differenсes = _.differenceWith(data, watchedState.posts, _.isEqual);
+              if (differenсes.length !== 0) {
+                watchedState.posts.unshift(...differenсes);
+              }
+              updatePosts();
+            });
+        }, 5000);
+      };
+      updatePosts();
+
       rssFormEl.addEventListener('submit', (e) => {
         e.preventDefault();
         const inputUrl = new FormData(e.target).get('url').trim();
@@ -59,6 +88,7 @@ export default () => {
                 watchedState.validation.processState = error;
               });
           }
+        // eslint-disable-next-line no-unused-vars
         }).catch((_err) => {
           watchedState.validation.validationState = 'invalid';
         });

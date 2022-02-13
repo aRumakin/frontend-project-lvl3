@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const renderValid = (inputEl, feedbackEl, validText) => {
   inputEl.classList.remove('is-invalid');
   feedbackEl.classList.add('text-success');

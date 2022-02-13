@@ -18,7 +18,6 @@ export default (posts, i18n) => {
     liForPost.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
     const aForPost = document.createElement('a');
     aForPost.setAttribute('href', `${post.postLink}`);
-    console.log(post.postLink);
     aForPost.classList.add('fw-bold');
     const dataId = _.uniqueId();
     aForPost.dataset.id = dataId;
