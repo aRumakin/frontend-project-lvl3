@@ -5,13 +5,21 @@ export default (dataXML) => {
   if (errorNode) {
     return '';
   }
+  const feedId = xmlDoc.querySelector('link').textContent.trim();
   const feedTitle = xmlDoc.querySelector('title').textContent.trim();
   const feedDescription = xmlDoc.querySelector('description').textContent.trim();
-  const postEls = xmlDoc.querySelectorAll('channel' > 'item');
-  const feed = { feedTitle, feedDescription };
+  const postEls = xmlDoc.querySelectorAll('item');
+  const feed = { feedId, feedTitle, feedDescription };
   const posts = [];
   const feedItems = Array.from(postEls);
   feedItems.forEach((post) => {
-    post.querySelector('')
+    const postId = feedId;
+    const postTitle = post.querySelector('title').textContent.trim();
+    const postLink = post.querySelector('link').textContent.trim();
+    const postDescription = post.querySelector('description').textContent.trim();
+    posts.push({
+      postId, postTitle, postLink, postDescription,
+    });
   });
+  return { feed, posts };
 };

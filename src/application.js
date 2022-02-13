@@ -19,6 +19,8 @@ export default () => {
         lng: defaultLng,
         inputUrl: '',
         validUrls: [],
+        feeds: [],
+        posts: [],
         form: {
           processState: 'filling',
         },
@@ -45,6 +47,8 @@ export default () => {
                 const parsedRSS = parseRSS(response.data, watchedState);
                 if (parsedRSS !== '') {
                   watchedState.validation.validationState = 'valid';
+                  watchedState.feeds.push(parsedRSS.feed);
+                  watchedState.posts.push(...parsedRSS.posts);
                   watchedState.validUrls.push(inputUrl);
                   watchedState.parserState = 'valid';
                 } else {

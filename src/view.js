@@ -1,5 +1,7 @@
 import onChange from 'on-change';
 import renderError from './render/renderErrors';
+import renderFeeds from './render/renderFeeds';
+import renderPosts from './render/renderPosts';
 import renderValid from './render/renderValid';
 
 const watchedState = (state, i18n) => onChange(state, (path, value) => {
@@ -45,6 +47,12 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
       rssFormEl.reset();
       rssFormEl.focus();
     }
+  }
+  if (path === 'feeds') {
+    renderFeeds(value, i18n.t('feeds'));
+  }
+  if (path === 'posts') {
+    renderPosts(value, i18n);
   }
 });
 
