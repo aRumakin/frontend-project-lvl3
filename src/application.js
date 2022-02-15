@@ -6,7 +6,7 @@ import watchedSt from './view';
 import resources from './locales/index.js';
 import parseRSS from './parser';
 
-export default async () => {
+export default () => {
   const defaultLng = 'ru';
   const i18nInstance = i18n.createInstance();
   return i18nInstance.init({
