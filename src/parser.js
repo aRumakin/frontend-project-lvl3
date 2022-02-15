@@ -13,12 +13,13 @@ export default (dataXML) => {
   const posts = [];
   const feedItems = Array.from(postEls);
   feedItems.forEach((post) => {
-    const postId = feedId;
+    const feedPostId = feedId;
+    const postGuidId = post.querySelector('guid').textContent.trim();
     const postTitle = post.querySelector('title').textContent.trim();
     const postLink = post.querySelector('link').textContent.trim();
     const postDescription = post.querySelector('description').textContent.trim();
     posts.push({
-      postId, postTitle, postLink, postDescription,
+      feedPostId, postGuidId, postTitle, postLink, postDescription,
     });
   });
   return { feed, posts };

@@ -21,6 +21,7 @@ export default () => {
         validUrls: [],
         feeds: [],
         posts: [],
+        watchedPosts: [],
         form: {
           processState: 'filling',
         },
@@ -29,10 +30,15 @@ export default () => {
           validationState: '', // valid, invalid, duplication
           processError: null,
         },
+        modal: {
+          modalView: 'hidden', // hidden, show
+          modalPreview: {},
+        },
         parserState: '', // valid, invalid
       };
       const rssFormEl = document.querySelector('.rss-form');
-      const inputEl = document.querySelector('#url-input');
+      const containerPosts = document.querySelector('.posts');
+      const modalContentEl = document.querySelector('.modal-content');
 
       const watchedState = watchedSt(state, i18nInstance);
 
@@ -64,6 +70,13 @@ export default () => {
       };
       updatePosts();
 
+      const closeButtons = modalContentEl.querySelectorAll('[type="button"]');
+      closeButtons.forEach((el) => {
+        el.addEventListener('click', () => {
+          watchedState.modal.modalView = 'hidden';
+        });
+      });
+
       rssFormEl.addEventListener('submit', (e) => {
         e.preventDefault();
         const inputUrl = new FormData(e.target).get('url').trim();
@@ -92,6 +105,18 @@ export default () => {
         }).catch((_err) => {
           watchedState.validation.validationState = 'invalid';
         });
+      });
+      containerPosts.addEventListener('click', (e) => {
+        const { id } = e.target.dataset;
+        const { type } = e.target;
+        if (!watchedState.watchedPosts.includes(id)) {
+          watchedState.watchedPosts.push(id);
+        }
+        if (type === 'button') {
+          const postShow = watchedState.posts.find((post) => post.postGuidId === id);
+          watchedState.modal.modalPreview = { ...postShow };
+          watchedState.modal.modalView = 'show';
+        }
       });
     });
 };
