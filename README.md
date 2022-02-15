@@ -7,11 +7,8 @@
 ### Maintainability Badge:
 [![Maintainability](https://api.codeclimate.com/v1/badges/9836416e0dac0dfb8824/maintainability)](https://codeclimate.com/github/aRumakin/frontend-project-lvl3/maintainability)
 
-### Test coverage Badge:
-[![Test Coverage](https://api.codeclimate.com/v1/badges/9836416e0dac0dfb8824/test_coverage)](https://codeclimate.com/github/aRumakin/frontend-project-lvl3/test_coverage)
-
 ### Application:
-https://frontend-project-lvl3-2cr0g02mh-arumakin.vercel.app/
+https://frontend-project-lvl3-arumakin.vercel.app/
 
 This project has been created using **webpack-cli**, you can now run
 
