@@ -8,7 +8,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/9836416e0dac0dfb8824/maintainability)](https://codeclimate.com/github/aRumakin/frontend-project-lvl3/maintainability)
 
 ### Application:
-https://frontend-project-lvl3-arumakin.vercel.app/
+https://frontend-project-lvl3-eight-azure.vercel.app/
 
 This project has been created using **webpack-cli**, you can now run
 
