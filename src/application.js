@@ -35,6 +35,7 @@ export default () => {
           modalPreview: {},
         },
         parserState: '', // valid, invalid
+        error: '',
       };
       const rssFormEl = document.querySelector('.rss-form');
       const containerPosts = document.querySelector('.posts');
@@ -49,14 +50,15 @@ export default () => {
           watchedState.validUrls.forEach((url) => {
             axios.get(routes(url))
               .then((response) => {
+                watchedState.error = '';
                 const parsed = parseRSS(response.data.contents, watchedState);
                 if (parsed !== '') {
                   tempPosts.push(...parsed.posts);
                 }
               })
-              .catch((error) => {
-                console.log(error);
-                updatePosts();
+              .catch((e) => {
+                watchedState.error = e.message;
+                console.log(watchedState.error);
               });
           });
           Promise.all(tempPosts)
@@ -87,6 +89,7 @@ export default () => {
           } else {
             axios.get(routes(inputUrl))
               .then((response) => {
+                watchedState.error = '';
                 const parsedRSS = parseRSS(response.data.contents, watchedState);
                 if (parsedRSS !== '') {
                   watchedState.validation.validationState = 'valid';
@@ -98,8 +101,9 @@ export default () => {
                   watchedState.parserState = 'invalid';
                 }
               })
-              .catch((error) => {
-                watchedState.validation.processState = error;
+              .catch((err) => {
+                watchedState.error = err.message;
+                console.log(watchedState.error);
               });
           }
         // eslint-disable-next-line no-unused-vars

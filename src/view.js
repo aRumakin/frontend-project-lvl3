@@ -73,6 +73,11 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
       watchedPostEl.classList.add('link-secondary');
     });
   }
+  if (path === 'error') {
+    if (value === 'Network Error') {
+      renderError(urlInputEl, feedbackEl, i18n.t('feedback.networkError'));
+    }
+  }
 });
 
 export default watchedState;
