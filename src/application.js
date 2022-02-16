@@ -85,7 +85,7 @@ export default () => {
           if (watchedState.validUrls.includes(inputUrl)) {
             watchedState.validation.validationState = 'duplication';
           } else {
-            axios.get(inputUrl)
+            axios.get(routes(inputUrl))
               .then((response) => {
                 const parsedRSS = parseRSS(response.data, watchedState);
                 if (parsedRSS !== '') {
