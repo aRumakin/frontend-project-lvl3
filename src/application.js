@@ -41,7 +41,7 @@ export default () => {
       const modalContentEl = document.querySelector('.modal-content');
 
       const watchedState = watchedSt(state, i18nInstance);
-      const routes = (value) => `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`;
+      const routes = (value) => `https://hexlet-allorigins.herokuapp.com/get?url=${value}`;
 
       const updatePosts = () => {
         setTimeout(() => {
@@ -49,7 +49,7 @@ export default () => {
           watchedState.validUrls.forEach((url) => {
             axios.get(routes(url))
               .then((response) => {
-                const parsed = parseRSS(response.data, watchedState);
+                const parsed = parseRSS(response.data.contents, watchedState);
                 if (parsed !== '') {
                   tempPosts.push(...parsed.posts);
                 }
@@ -87,7 +87,7 @@ export default () => {
           } else {
             axios.get(routes(inputUrl))
               .then((response) => {
-                const parsedRSS = parseRSS(response.data, watchedState);
+                const parsedRSS = parseRSS(response.data.contents, watchedState);
                 if (parsedRSS !== '') {
                   watchedState.validation.validationState = 'valid';
                   watchedState.feeds.push(parsedRSS.feed);
