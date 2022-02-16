@@ -1,4 +1,5 @@
 import onChange from 'on-change';
+import formControl from './formControl';
 import renderCloseModal from './render/renderCloseModal';
 import renderError from './render/renderErrors';
 import renderFeeds from './render/renderFeeds';
@@ -19,6 +20,8 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
   const modalButtonReadEl = document.querySelector('.btn-primary', '.full-article');
   const modalButtonCloseEl = document.querySelector('.btn-secondary');
 
+  const { disable, enable } = formControl;
+
   if (path === 'lng') { // отрисовка языка
     i18n
       .changeLanguage(value)
@@ -31,6 +34,26 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
         modalButtonReadEl.textContent = l('buttonModal.primary');
         modalButtonCloseEl.textContent = l('buttonModal.secondary');
       });
+  }
+  if (path === 'formState') {
+    switch (value) {
+      case 'processing':
+        feedbackEl.textContent = '';
+        disable(urlInputEl, addButtonEl);
+        break;
+      case 'failed':
+        enable(urlInputEl, addButtonEl);
+        renderError(urlInputEl, feedbackEl, i18n.t('feedback.networkError'));
+        break;
+      case 'filling':
+        enable(urlInputEl, addButtonEl);
+        break;
+      case 'success':
+        enable(urlInputEl, addButtonEl);
+        break;
+      default:
+        throw new Error(`Unknown status ${value}`);
+    }
   }
   if (path === 'validation.validationState') { // отрисовка состояния валидации
     if (value === 'invalid') {

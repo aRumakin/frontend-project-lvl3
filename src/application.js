@@ -22,9 +22,7 @@ export default () => {
         feeds: [],
         posts: [],
         watchedPosts: [],
-        form: {
-          processState: 'filling',
-        },
+        formState: 'filling', // failed, filling, succesfull, process
         validation: {
           processState: '',
           validationState: '', // valid, invalid, duplication
@@ -58,7 +56,6 @@ export default () => {
               })
               .catch((e) => {
                 watchedState.error = e.message;
-                console.log(watchedState.error);
               });
           });
           Promise.all(tempPosts)
@@ -83,10 +80,12 @@ export default () => {
       rssFormEl.addEventListener('submit', (e) => {
         e.preventDefault();
         const inputUrl = new FormData(e.target).get('url').trim();
+        watchedState.formState = 'processing';
         validator(inputUrl, i18nInstance).then(() => {
           if (watchedState.validUrls.includes(inputUrl)) {
             watchedState.validation.validationState = 'duplication';
           } else {
+            watchedState.formState = 'filling';
             axios.get(routes(inputUrl))
               .then((response) => {
                 watchedState.error = '';
@@ -95,19 +94,22 @@ export default () => {
                   watchedState.validation.validationState = 'valid';
                   watchedState.feeds.push(parsedRSS.feed);
                   watchedState.posts.push(...parsedRSS.posts);
+                  watchedState.formState = 'success';
                   watchedState.validUrls.push(inputUrl);
                   watchedState.parserState = 'valid';
                 } else {
+                  watchedState.formState = 'failed';
                   watchedState.parserState = 'invalid';
                 }
               })
               .catch((err) => {
+                watchedState.formState = 'failed';
                 watchedState.error = err.message;
-                console.log(watchedState.error);
               });
           }
         // eslint-disable-next-line no-unused-vars
         }).catch((_err) => {
+          watchedState.formState = 'failed';
           watchedState.validation.validationState = 'invalid';
         });
       });
