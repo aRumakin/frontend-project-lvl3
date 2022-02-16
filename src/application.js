@@ -41,12 +41,13 @@ export default () => {
       const modalContentEl = document.querySelector('.modal-content');
 
       const watchedState = watchedSt(state, i18nInstance);
+      const routes = (value) => `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(value)}`;
 
       const updatePosts = () => {
         setTimeout(() => {
           const tempPosts = [];
           watchedState.validUrls.forEach((url) => {
-            axios.get(url)
+            axios.get(routes(url))
               .then((response) => {
                 const parsed = parseRSS(response.data, watchedState);
                 if (parsed !== '') {
