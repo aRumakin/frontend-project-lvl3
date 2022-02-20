@@ -8,7 +8,7 @@ export default {
     feedback: {
       invalidLink: 'The link must be a valid URL',
       notValidRss: 'The resource does not contain valid RSS',
-      duplicate: 'RSS already exists',
+      duplication: 'RSS already exists',
       success: 'RSS uploaded successfully',
       networkError: 'Network error',
     },
