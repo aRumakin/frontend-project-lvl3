@@ -3,7 +3,7 @@ export default (dataXML) => {
   const xmlDoc = parser.parseFromString(dataXML, 'application/xml');
   const errorNode = xmlDoc.querySelector('parsererror');
   if (errorNode) {
-    return '';
+    throw new Error('notValidRss');
   }
   const feedId = xmlDoc.querySelector('link').textContent.trim();
   const feedTitle = xmlDoc.querySelector('title').textContent.trim();

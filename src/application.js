@@ -22,17 +22,12 @@ export default () => {
         feeds: [],
         posts: [],
         watchedPosts: [],
-        formState: 'filling', // failed, filling, succesfull, process
-        validation: {
-          processState: '',
-          validationState: '', // valid, invalid, duplication
-          processError: null,
-        },
+        formUpdateState: 'filling', // failed, filling, succesfull, processing
+        validationState: '', // valid, invalid
         modal: {
           modalView: 'hidden', // hidden, show
           modalPreview: {},
         },
-        parserState: '', // valid, invalid
         error: '',
       };
       const rssFormEl = document.querySelector('.rss-form');
@@ -46,14 +41,13 @@ export default () => {
         setTimeout(() => {
           const tempPosts = [];
           watchedState.validUrls.forEach((url) => {
-            axios.get(routes(url))
-              .then((response) => {
-                watchedState.error = '';
-                const parsed = parseRSS(response.data.contents, watchedState);
-                if (parsed !== '') {
-                  tempPosts.push(...parsed.posts);
-                }
-              })
+            axios.get(routes(url)).then((response) => {
+              watchedState.error = '';
+              const parsed = parseRSS(response.data.contents);
+              if (parsed !== '') {
+                tempPosts.push(...parsed.posts);
+              }
+            })
               .catch((e) => {
                 watchedState.error = e.message;
               });
@@ -79,43 +73,47 @@ export default () => {
 
       rssFormEl.addEventListener('submit', (e) => {
         e.preventDefault();
+        watchedState.error = '';
         const inputUrl = new FormData(e.target).get('url').trim();
-        watchedState.formState = 'processing';
-        validator(inputUrl, i18nInstance).then(() => {
-          if (watchedState.validUrls.includes(inputUrl)) {
-            watchedState.validation.validationState = 'duplication';
+        watchedState.formUpdateState = 'processing';
+        validator(inputUrl, watchedState).then((isValid) => {
+          if (isValid === false) {
+            watchedState.formUpdateState = 'failed';
+            watchedState.error = 'invalidLink';
+            watchedState.validationState = 'invalid';
           } else {
-            watchedState.formState = 'filling';
-            axios.get(routes(inputUrl))
-              .then((response) => {
-                watchedState.error = '';
-                const parsedRSS = parseRSS(response.data.contents, watchedState);
-                if (parsedRSS !== '') {
-                  watchedState.validation.validationState = 'valid';
-                  watchedState.feeds.push(parsedRSS.feed);
-                  watchedState.posts.push(...parsedRSS.posts);
-                  watchedState.formState = 'success';
-                  watchedState.validUrls.push(inputUrl);
-                  watchedState.parserState = 'valid';
-                } else {
-                  watchedState.formState = 'failed';
-                  watchedState.parserState = 'invalid';
-                }
-              })
-              .catch((err) => {
-                watchedState.formState = 'failed';
+            watchedState.formUpdateState = 'filling';
+            axios.get(routes(inputUrl)).then((response) => {
+              try {
+                const parsedRSS = parseRSS(response.data.contents);
+                watchedState.error = null;
+                watchedState.validationState = 'valid';
+                watchedState.feeds.push(parsedRSS.feed);
+                watchedState.posts.push(...parsedRSS.posts);
+                watchedState.formUpdateState = 'success';
+                watchedState.validUrls.push(inputUrl);
+              } catch (err) {
+                watchedState.formUpdateState = 'failed';
+                console.log(err);
                 watchedState.error = err.message;
-              });
+                watchedState.validationState = 'invalid';
+              }
+            }).catch((err) => {
+              console.log(err.message);
+              watchedState.formUpdateState = 'failed';
+              watchedState.error = err.message;
+              watchedState.validationState = 'invalid';
+            });
           }
-        // eslint-disable-next-line no-unused-vars
-        }).catch((_err) => {
-          watchedState.formState = 'failed';
-          watchedState.validation.validationState = 'invalid';
+        }).catch((er) => {
+          watchedState.formUpdateState = 'failed';
+          watchedState.error = er.message;
+          watchedState.validationState = 'invalid';
         });
       });
-      containerPosts.addEventListener('click', (e) => {
-        const { id } = e.target.dataset;
-        const { type } = e.target;
+      containerPosts.addEventListener('click', (event) => {
+        const { id } = event.target.dataset;
+        const { type } = event.target;
         if (!watchedState.watchedPosts.includes(id)) {
           watchedState.watchedPosts.push(id);
         }

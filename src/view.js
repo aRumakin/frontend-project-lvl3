@@ -35,7 +35,7 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
         modalButtonCloseEl.textContent = l('buttonModal.secondary');
       });
   }
-  if (path === 'formState') {
+  if (path === 'formUpdateState') {
     switch (value) {
       case 'processing':
         feedbackEl.textContent = '';
@@ -43,7 +43,6 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
         break;
       case 'failed':
         enable(urlInputEl, addButtonEl);
-        renderError(urlInputEl, feedbackEl, i18n.t('feedback.networkError'));
         break;
       case 'filling':
         enable(urlInputEl, addButtonEl);
@@ -55,18 +54,7 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
         throw new Error(`Unknown status ${value}`);
     }
   }
-  if (path === 'validation.validationState') { // отрисовка состояния валидации
-    if (value === 'invalid') {
-      renderError(urlInputEl, feedbackEl, i18n.t('feedback.invalidLink'));
-    }
-    if (value === 'duplication') {
-      renderError(urlInputEl, feedbackEl, i18n.t('feedback.duplicate'));
-    }
-  }
-  if (path === 'parserState') {
-    if (value === 'invalid') {
-      renderError(urlInputEl, feedbackEl, i18n.t('feedback.notValidRss'));
-    }
+  if (path === 'validationState') { // отрисовка состояния валидации
     if (value === 'valid') {
       renderValid(urlInputEl, feedbackEl, i18n.t('feedback.success'));
       rssFormEl.reset();
@@ -97,8 +85,8 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
     });
   }
   if (path === 'error') {
-    if (value === 'Network Error') {
-      renderError(urlInputEl, feedbackEl, i18n.t('feedback.networkError'));
+    if (value !== '') {
+      renderError(urlInputEl, feedbackEl, i18n.t(`feedback.${value}`));
     }
   }
 });
