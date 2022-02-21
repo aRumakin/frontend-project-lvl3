@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import axios from 'axios';
 import i18n from 'i18next';
+import _ from 'lodash';
 import validator from './validator';
 import watchedSt from './view';
 import resources from './locales/index';
