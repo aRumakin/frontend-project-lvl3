@@ -94,14 +94,12 @@ export default () => {
                 watchedState.validUrls.push(inputUrl);
               } catch (err) {
                 watchedState.formUpdateState = 'failed';
-                console.log(err);
                 watchedState.error = err.message;
                 watchedState.validationState = 'invalid';
               }
-            }).catch((err) => {
-              console.log(err.message);
+            }).catch(() => {
               watchedState.formUpdateState = 'failed';
-              watchedState.error = err.message;
+              watchedState.error = 'networkError';
               watchedState.validationState = 'invalid';
             });
           }
