@@ -48,8 +48,8 @@ export default () => {
                 tempPosts.push(...parsed.posts);
               }
             })
-              .catch((e) => {
-                watchedState.error = e.message;
+              .catch((err) => {
+                console.log(err);
               });
           });
           Promise.all(tempPosts)
