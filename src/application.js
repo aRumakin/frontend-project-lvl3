@@ -42,7 +42,6 @@ export default () => {
           const tempPosts = [];
           watchedState.validUrls.forEach((url) => {
             axios.get(routes(url)).then((response) => {
-              watchedState.error = '';
               const parsed = parseRSS(response.data.contents);
               if (parsed !== '') {
                 tempPosts.push(...parsed.posts);
