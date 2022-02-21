@@ -18,6 +18,7 @@
   },
   "author": "Andrey Rumakin",
   "license": "ISC",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/aRumakin/frontend-project-lvl3/issues"
   },
