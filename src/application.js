@@ -85,7 +85,7 @@ export default () => {
             axios.get(routes(inputUrl)).then((response) => {
               try {
                 const parsedRSS = parseRSS(response.data.contents);
-                watchedState.error = null;
+                watchedState.error = '';
                 watchedState.validationState = 'valid';
                 watchedState.feeds.push(parsedRSS.feed);
                 watchedState.posts.push(...parsedRSS.posts);
