@@ -4,9 +4,9 @@
   "description": "RSS aggregator",
   "main": "./src/application.js",
   "scripts": {
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "build": "webpack --mode=production --node-env=production",
     "prod": "webpack -p",
-    "test": "jest --colors",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
