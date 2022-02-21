@@ -4,9 +4,9 @@
   "description": "RSS aggregator",
   "main": "./src/application.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "build": "webpack --mode=production --node-env=production",
     "prod": "webpack -p",
+    "test": "jest --colors",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
@@ -24,19 +24,12 @@
   "homepage": "https://github.com/aRumakin/frontend-project-lvl3#readme",
   "jest": {
     "verbose": true,
-    "testURL": "http://localhost/",
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "transform": {
-      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!variables/.*)"
-    ]
+    "testURL": "http://localhost/"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/eslint-parser": "^7.15.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.16.8",
     "@babel/preset-env": "^7.15.4",
     "babel-jest": "^27.1.1",
     "babel-loader": "^8.2.2",
