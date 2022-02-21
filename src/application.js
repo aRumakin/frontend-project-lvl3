@@ -99,7 +99,9 @@ export default () => {
               }
             }).catch(() => {
               watchedState.formUpdateState = 'failed';
-              watchedState.error = 'networkError';
+              if (watchedState.error === '') {
+                watchedState.error = 'networkError';
+              }
               watchedState.validationState = 'invalid';
             });
           }
