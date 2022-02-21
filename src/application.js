@@ -1,10 +1,10 @@
 import i18n from 'i18next';
 import _ from 'lodash';
 import axios from 'axios';
-import validator from './validator';
-import watchedSt from './view';
-import resources from './locales/index';
-import parseRSS from './parser';
+import validator from './validator.js';
+import watchedSt from './view.js';
+import resources from './locales/index.js';
+import parseRSS from './parser.js';
 
 export default () => {
   const defaultLng = 'ru';

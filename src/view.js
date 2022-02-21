@@ -1,11 +1,11 @@
 import onChange from 'on-change';
-import formControl from './formControl';
-import renderCloseModal from './render/renderCloseModal';
-import renderError from './render/renderErrors';
-import renderFeeds from './render/renderFeeds';
-import renderModal from './render/renderModal';
-import renderPosts from './render/renderPosts';
-import renderValid from './render/renderValid';
+import formControl from './formControl.js';
+import renderCloseModal from './render/renderCloseModal.js';
+import renderError from './render/renderErrors.js';
+import renderFeeds from './render/renderFeeds.js';
+import renderModal from './render/renderModal.js';
+import renderPosts from './render/renderPosts.js';
+import renderValid from './render/renderValid.js';
 
 const watchedState = (state, i18n) => onChange(state, (path, value) => {
   const rssFormEl = document.querySelector('.rss-form');
