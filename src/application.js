@@ -22,7 +22,7 @@ export default () => {
         feeds: [],
         posts: [],
         watchedPosts: [],
-        formUpdateState: 'filling', // failed, filling, succesfull, processing
+        formUpdateState: 'readyToFill', // readyToFill, processing
         validationState: '', // valid, invalid
         modal: {
           modalView: 'hidden', // hidden, show
@@ -43,13 +43,10 @@ export default () => {
           watchedState.validUrls.forEach((url) => {
             axios.get(routes(url)).then((response) => {
               const parsed = parseRSS(response.data.contents);
-              if (parsed !== '') {
-                tempPosts.push(...parsed.posts);
-              }
-            })
-              .catch((err) => {
-                console.log(err);
-              });
+              tempPosts.push(...parsed.posts);
+            }).catch((err) => {
+              console.log(err);
+            });
           });
           Promise.all(tempPosts)
             .then((data) => {
@@ -75,37 +72,31 @@ export default () => {
         watchedState.error = '';
         const inputUrl = new FormData(e.target).get('url').trim();
         watchedState.formUpdateState = 'processing';
-        validator(inputUrl, watchedState).then((isValid) => {
-          if (isValid === false) {
-            watchedState.formUpdateState = 'readyToFill';
-            watchedState.error = 'invalidLink';
-            watchedState.validationState = 'invalid';
-          } else {
-            axios.get(routes(inputUrl)).then((response) => {
-              try {
-                const parsedRSS = parseRSS(response.data.contents);
-                watchedState.error = '';
-                watchedState.validationState = 'valid';
-                watchedState.feeds.push(parsedRSS.feed);
-                watchedState.posts.push(...parsedRSS.posts);
-                watchedState.formUpdateState = 'readyToFill';
-                watchedState.validUrls.push(inputUrl);
-              } catch (err) {
-                watchedState.formUpdateState = 'readyToFill';
-                watchedState.error = err.message;
-                watchedState.validationState = 'invalid';
-              }
-            }).catch(() => {
+        validator(inputUrl, watchedState).then(() => {
+          axios.get(routes(inputUrl)).then((response) => {
+            try {
+              const parsedRSS = parseRSS(response.data.contents);
+              watchedState.error = '';
+              watchedState.validationState = 'valid';
+              watchedState.feeds.push(parsedRSS.feed);
+              watchedState.posts.push(...parsedRSS.posts);
               watchedState.formUpdateState = 'readyToFill';
-              if (watchedState.error === '') {
-                watchedState.error = 'networkError';
-              }
+              watchedState.validUrls.push(inputUrl);
+            } catch (err) {
+              watchedState.formUpdateState = 'readyToFill';
+              watchedState.error = err.message;
               watchedState.validationState = 'invalid';
-            });
-          }
-        }).catch((er) => {
+            }
+          }).catch(() => {
+            watchedState.formUpdateState = 'readyToFill';
+            if (watchedState.error === '') {
+              watchedState.error = 'networkError';
+            }
+            watchedState.validationState = 'invalid';
+          });
+        }).catch((err2) => {
+          watchedState.error = (err2.message === 'duplication') ? 'duplication' : 'invalidLink';
           watchedState.formUpdateState = 'readyToFill';
-          watchedState.error = er.message;
           watchedState.validationState = 'invalid';
         });
       });

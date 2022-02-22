@@ -8,7 +8,7 @@ const validator = (dataUrl, watchedState) => {
   const schema = yup.object({
     url: yup.string().url(),
   });
-  return schema.isValid({ url: dataUrl });
+  return schema.validate({ url: dataUrl });
 };
 
 export default validator;
