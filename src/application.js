@@ -49,7 +49,6 @@ export default () => {
             })
               .catch((err) => {
                 console.log(err);
-                updatePosts();
               });
           });
           Promise.all(tempPosts)
@@ -78,11 +77,10 @@ export default () => {
         watchedState.formUpdateState = 'processing';
         validator(inputUrl, watchedState).then((isValid) => {
           if (isValid === false) {
-            watchedState.formUpdateState = 'failed';
+            watchedState.formUpdateState = 'readyToFill';
             watchedState.error = 'invalidLink';
             watchedState.validationState = 'invalid';
           } else {
-            watchedState.formUpdateState = 'filling';
             axios.get(routes(inputUrl)).then((response) => {
               try {
                 const parsedRSS = parseRSS(response.data.contents);
@@ -90,15 +88,15 @@ export default () => {
                 watchedState.validationState = 'valid';
                 watchedState.feeds.push(parsedRSS.feed);
                 watchedState.posts.push(...parsedRSS.posts);
-                watchedState.formUpdateState = 'success';
+                watchedState.formUpdateState = 'readyToFill';
                 watchedState.validUrls.push(inputUrl);
               } catch (err) {
-                watchedState.formUpdateState = 'failed';
+                watchedState.formUpdateState = 'readyToFill';
                 watchedState.error = err.message;
                 watchedState.validationState = 'invalid';
               }
             }).catch(() => {
-              watchedState.formUpdateState = 'failed';
+              watchedState.formUpdateState = 'readyToFill';
               if (watchedState.error === '') {
                 watchedState.error = 'networkError';
               }
@@ -106,7 +104,7 @@ export default () => {
             });
           }
         }).catch((er) => {
-          watchedState.formUpdateState = 'failed';
+          watchedState.formUpdateState = 'readyToFill';
           watchedState.error = er.message;
           watchedState.validationState = 'invalid';
         });

@@ -41,13 +41,7 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
         feedbackEl.textContent = '';
         disable(urlInputEl, addButtonEl);
         break;
-      case 'failed':
-        enable(urlInputEl, addButtonEl);
-        break;
-      case 'filling':
-        enable(urlInputEl, addButtonEl);
-        break;
-      case 'success':
+      case 'readyToFill':
         enable(urlInputEl, addButtonEl);
         break;
       default:
