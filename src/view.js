@@ -52,7 +52,7 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
     if (value === 'valid') {
       renderValid(urlInputEl, feedbackEl, i18n.t('feedback.success'));
       rssFormEl.reset();
-      rssFormEl.focus();
+      urlInputEl.focus();
     }
   }
   if (path === 'feeds') {
