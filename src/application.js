@@ -41,6 +41,7 @@ export default () => {
         setTimeout(() => {
           const tempPosts = [];
           watchedState.validUrls.forEach((url) => {
+            console.log(routes(url));
             axios.get(routes(url)).then((response) => {
               const parsed = parseRSS(response.data.contents);
               tempPosts.push(...parsed.posts);
@@ -71,6 +72,7 @@ export default () => {
         e.preventDefault();
         watchedState.error = '';
         const inputUrl = new FormData(e.target).get('url').trim();
+        console.log(routes(inputUrl));
         watchedState.formUpdateState = 'processing';
         validator(inputUrl, watchedState).then(() => {
           axios.get(routes(inputUrl)).then((response) => {
