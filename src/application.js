@@ -71,7 +71,6 @@ export default () => {
         e.preventDefault();
         watchedState.error = '';
         const inputUrl = new FormData(e.target).get('url').trim();
-        console.log(inputUrl);
         watchedState.formUpdateState = 'processing';
         validator(inputUrl, watchedState).then(() => {
           axios.get(routes(inputUrl)).then((response) => {
@@ -80,13 +79,13 @@ export default () => {
               watchedState.error = '';
               watchedState.feeds.push(parsedRSS.feed);
               watchedState.posts.push(...parsedRSS.posts);
-              watchedState.formUpdateState = 'readyToFill';
               watchedState.validUrls.push(inputUrl);
+              watchedState.formUpdateState = 'readyToFill';
               watchedState.validationState = 'valid';
             } catch (err) {
-              watchedState.formUpdateState = 'readyToFill';
               watchedState.error = err.message;
               watchedState.validationState = 'invalid';
+              watchedState.formUpdateState = 'readyToFill';
             }
           }).catch(() => {
             watchedState.formUpdateState = 'readyToFill';
@@ -97,8 +96,8 @@ export default () => {
           });
         }).catch((err2) => {
           watchedState.error = (err2.message === 'duplication') ? 'duplication' : 'invalidLink';
-          watchedState.formUpdateState = 'readyToFill';
           watchedState.validationState = 'invalid';
+          watchedState.formUpdateState = 'readyToFill';
         });
       });
       containerPosts.addEventListener('click', (event) => {

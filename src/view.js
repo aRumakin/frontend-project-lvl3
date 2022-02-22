@@ -81,8 +81,6 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
   if (path === 'error') {
     if (value !== '') {
       renderError(urlInputEl, feedbackEl, i18n.t(`feedback.${value}`));
-      rssFormEl.reset();
-      urlInputEl.focus();
     }
   }
 });
