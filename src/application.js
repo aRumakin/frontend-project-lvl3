@@ -35,7 +35,7 @@ export default () => {
       const modalContentEl = document.querySelector('.modal-content');
 
       const watchedState = watchedSt(state, i18nInstance);
-      const routes = (value) => `https://allorigins.hexlet.app/get?url=${value}`;
+      const routes = (value) => `https://allorigins.hexlet.app/get?disableCache=true&url=${value}`;
 
       const updatePosts = () => {
         setTimeout(() => {
