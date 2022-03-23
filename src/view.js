@@ -51,6 +51,7 @@ const watchedState = (state, i18n) => onChange(state, (path, value) => {
   if (path === 'validationState') { // отрисовка состояния валидации
     if (value === 'valid') {
       renderValid(urlInputEl, feedbackEl, i18n.t('feedback.success'));
+      rssFormEl.reset();
       rssFormEl.value = '';
       urlInputEl.focus();
     }
